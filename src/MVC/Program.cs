@@ -2,6 +2,9 @@ using MVC.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MVC.Configurations;
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
+
 
 internal class Program
 {
@@ -9,11 +12,16 @@ internal class Program
     {
         var builder = WebApplication.CreateBuilder(args);
         builder.AddDatabaseSelector();
+        var supportedCultures = new[] { new CultureInfo("pt-BR") };
+
+    
+
 
         // Add services to the container.
         var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(connectionString));
+        builder.Services.AddHttpContextAccessor();
         builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
         builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -42,6 +50,12 @@ internal class Program
         app.UseRouting();
 
         app.UseAuthorization();
+        app.UseRequestLocalization(new RequestLocalizationOptions
+        {
+            DefaultRequestCulture = new RequestCulture("pt-BR"),
+            SupportedCultures = supportedCultures,
+            SupportedUICultures = supportedCultures
+        });
 
         app.MapControllerRoute(
             name: "default",

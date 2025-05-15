@@ -1,28 +1,44 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MVC.Data;
 using MVC.Models;
+using NuGet.Configuration;
 
 namespace MVC.Controllers
 {
+    [Authorize]
     public class ProdutosController : Controller
     {
+        private readonly string _userId;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        Guid UsuarioLogado =new Guid();
         private readonly AppDbContext _context;
+        
 
-        public ProdutosController(AppDbContext context)
+        public ProdutosController(AppDbContext context, IHttpContextAccessor httpContextAccessor)
         {
-            _context = context;
+            _userId = httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "Usuário não autenticado";
+
+
+            _context = context;            
         }
 
         // GET: Produtos
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Produtos.ToListAsync());
+            Guid UsuarioLogadoId = Guid.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier).Value);
+            var retorno = await _context.Produtos.ToListAsync();
+            return View(retorno.Where(p => p.VendedorId == UsuarioLogadoId));
+
+            
         }
 
         // GET: Produtos/Details/5
