@@ -1,29 +1,44 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using WebApi.Data;
+using WebApi.Models;
 
 namespace WebApi.Controllers
 {
-    public class HomeController : Controller
+    [ApiController]
+    [Route("api/produtos")]
+    public class PProdutoController : Controller
     {
-        // GET: HomeController
+        private readonly AppDbContext _context;
+        public PProdutoController(AppDbContext context) 
+        {
+            _context = context;
+        }
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Produto>>> GetProdutos()
+        {
+            return await _context.Produtos.ToListAsync();
+        }
+        // GET: PProdutoController
         public ActionResult Index()
         {
             return View();
         }
 
-        // GET: HomeController/Details/5
+        // GET: PProdutoController/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // GET: HomeController/Create
+        // GET: PProdutoController/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: HomeController/Create
+        // POST: PProdutoController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(IFormCollection collection)
@@ -38,13 +53,13 @@ namespace WebApi.Controllers
             }
         }
 
-        // GET: HomeController/Edit/5
+        // GET: PProdutoController/Edit/5
         public ActionResult Edit(int id)
         {
             return View();
         }
 
-        // POST: HomeController/Edit/5
+        // POST: PProdutoController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, IFormCollection collection)
@@ -59,13 +74,13 @@ namespace WebApi.Controllers
             }
         }
 
-        // GET: HomeController/Delete/5
+        // GET: PProdutoController/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
 
-        // POST: HomeController/Delete/5
+        // POST: PProdutoController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)

@@ -1,7 +1,3 @@
-using Microsoft.AspNetCore.Identity;
-using WebApi.Data;
-using MVC.Configurations;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -11,14 +7,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
-builder.AddDatabaseSelector();
-builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-    .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<AppDbContext>();
 var app = builder.Build();
-
-
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -28,11 +17,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseAuthentication();
 
-app.UseAuthorization();
 
 app.MapControllers();
-app.UseDbMigrationHelper();
 
 app.Run();
