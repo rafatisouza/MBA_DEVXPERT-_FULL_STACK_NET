@@ -18,14 +18,14 @@ internal class Program
 
 
         // Add services to the container.
-        var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-        builder.Services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlServer(connectionString));
-        builder.Services.AddHttpContextAccessor();
+        //var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+        //builder.Services.AddDbContext<AppDbContext>(options =>
+        //    options.UseSqlServer(connectionString));
+        //builder.Services.AddHttpContextAccessor();
         builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
         builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-            .AddEntityFrameworkStores<ApplicationDbContext>();
+            .AddEntityFrameworkStores<AppDbContext>();
         builder.Services.AddControllersWithViews();
         builder.Services.AddDbContext<AppDbContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -61,6 +61,7 @@ internal class Program
             name: "default",
             pattern: "{controller=Home}/{action=Index}/{id?}");
         app.MapRazorPages();
+        app.UseDbMigrationHelper();
 
         app.Run();
     }

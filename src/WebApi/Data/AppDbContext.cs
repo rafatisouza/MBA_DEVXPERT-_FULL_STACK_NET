@@ -1,8 +1,10 @@
-﻿using MVC.Models;
-using Microsoft.EntityFrameworkCore;
+﻿
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using WebApi.Models;
 
-namespace MVC.Data
+
+namespace WebApi.Data
 {
     public class AppDbContext : IdentityDbContext
     {
